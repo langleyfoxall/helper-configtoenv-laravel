@@ -2,7 +2,6 @@
 
 namespace LangleyFoxall\ConfigToEnv\Commands;
 
-use App\User;
 use Illuminate\Console\Command;
 use PhpParser\Error;
 use PhpParser\NodeDumper;
