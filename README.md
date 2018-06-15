@@ -16,7 +16,7 @@ As this package is currently private, you will first have to add this to the bot
 ]
 ```
 
-You can then run the following Composer commadn to install this package.
+You can then run the following Composer command to install this package.
 
 ```bash
 composer require langleyfoxall/laravel-config-to-env
