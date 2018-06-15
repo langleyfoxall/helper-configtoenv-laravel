@@ -52,6 +52,11 @@ class ConfigToEnvCommand extends Command
     {
         $files = glob($this->argument('files'));
 
+        if (!$files) {
+            $this->error('No file(s) match '.$files.'.');
+            exit;
+        }
+
         foreach($files as $file) {
             $this->validateFile($file);
             $this->processFile($file);
