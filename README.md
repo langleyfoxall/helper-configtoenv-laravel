@@ -11,7 +11,7 @@ As this package is currently private, you will first have to add this to the bot
 "repositories": [
     {
         "type": "vcs",
-        "url": "git@github.com:LFSoftware/unleashed-api-client-php.git"
+        "url": "git@github.com:LFSoftware/helper-configtoenv-laravel.git"
     }
 ]
 ```
