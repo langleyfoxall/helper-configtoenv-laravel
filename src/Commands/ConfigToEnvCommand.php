@@ -62,27 +62,28 @@ class ConfigToEnvCommand extends Command
             $originalAst = $parser->parse($code);
             $ast = $parser->parse($code);
         } catch (Error $e) {
-            throw new \Exception('Parse error: '.$e->getMessage());
+            $this->error('Parse error: '.$e->getMessage());
         }
 
         $this->recursiveWalkAndReplace($ast[0]->expr->items);
 
         file_put_contents($this->file, (new PrettyPrinter\Standard())->prettyPrintFile($ast));
 
+        $this->info($this->file.' processed.');
     }
 
     private function validateFile()
     {
         if (!file_exists($this->file)) {
-            throw new \Exception('Specified file does not exist.');
+            $this->error($this->file.' does not exist.');
         }
 
         if (!is_readable($this->file)) {
-            throw new \Exception('Specified file is not readable. Check permissions.');
+            $this->error($this->file.' is not readable. Check permissions.');
         }
 
         if (!is_writeable($this->file)) {
-            throw new \Exception('Specified file is not writeable. Check permissions.');
+            $this->error($this->file.' is not writeable. Check permissions.');
         }
     }
 
