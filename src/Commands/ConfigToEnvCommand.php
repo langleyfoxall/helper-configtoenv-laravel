@@ -146,7 +146,7 @@ class ConfigToEnvCommand extends Command
                         case ConstFetch::class:
                         
                             $key = $envKeyPrefix.'_'.strtoupper(implode('_', $keys));
-                            $value = (strtolower(reset($astElement->value->name->parts)) === 'true');
+                            $value = constant(reset($astElement->value->name->parts));
 
                             $envFuncCall = $factory->funcCall('env', [$key, $value]);
                             $astElement->value = $envFuncCall;
