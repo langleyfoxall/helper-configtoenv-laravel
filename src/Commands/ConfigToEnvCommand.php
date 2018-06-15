@@ -24,7 +24,7 @@ class ConfigToEnvCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'configToEnv:apply {file}';
+    protected $signature = 'config:config-to-env {file}';
 
     /**
      * The console command description.
