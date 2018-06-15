@@ -140,7 +140,9 @@ class ConfigToEnvCommand extends Command
 
 
                         default:
-                            $keys[] = $astElement->key->value;
+                            if ($astElement->key) {
+                                $keys[] = $astElement->key->value;
+                            }
                             $this->recursiveWalkAndReplace($envKeyPrefix, $astElement->value, $keys);
                             break;
                     }
