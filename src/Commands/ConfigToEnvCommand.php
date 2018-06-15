@@ -24,7 +24,7 @@ class ConfigToEnvCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'config:config-to-env {file}';
+    protected $signature = 'config:config-to-env {files}';
 
     /**
      * The console command description.
@@ -50,12 +50,19 @@ class ConfigToEnvCommand extends Command
      */
     public function handle()
     {
-        $this->file = $this->argument('file');
-        $this->envKeyPrefix = strtoupper(substr(basename($this->file), 0, -4));
+        $files = glob($this->argument('files'));
 
-        $this->validateFile();
+        foreach($files as $file) {
+            $this->validateFile($file);
+            $this->processFile($file);
+        }
+    }
 
-        $code = file_get_contents($this->file);
+    private function processFile($file)
+    {
+        $envKeyPrefix = strtoupper(substr(basename($file), 0, -4));
+
+        $code = file_get_contents($file);
 
         try {
             $parser = (new ParserFactory)->create(ParserFactory::PREFER_PHP7);
@@ -66,38 +73,38 @@ class ConfigToEnvCommand extends Command
             exit;
         }
 
-        $this->recursiveWalkAndReplace($ast[0]->expr->items);
+        $this->recursiveWalkAndReplace($envKeyPrefix, $ast[0]->expr->items);
 
-        file_put_contents($this->file, (new PrettyPrinter\Standard())->prettyPrintFile($ast));
+        file_put_contents($file, (new PrettyPrinter\Standard())->prettyPrintFile($ast));
 
-        $this->info($this->file.' processed.');
+        $this->info($file.' processed.');
     }
 
-    private function validateFile()
+    private function validateFile($file)
     {
-        if (!file_exists($this->file)) {
-            $this->error($this->file.' does not exist.');
+        if (!file_exists($file)) {
+            $this->error($file.' does not exist.');
             exit;
         }
 
-        if (!is_readable($this->file)) {
-            $this->error($this->file.' is not readable. Check permissions.');
+        if (!is_readable($file)) {
+            $this->error($file.' is not readable. Check permissions.');
             exit;
         }
 
-        if (!is_writeable($this->file)) {
-            $this->error($this->file.' is not writeable. Check permissions.');
+        if (!is_writeable($file)) {
+            $this->error($file.' is not writeable. Check permissions.');
             exit;
         }
     }
 
-    private function recursiveWalkAndReplace(&$astElement, $keys = [])
+    private function recursiveWalkAndReplace($envKeyPrefix, &$astElement, $keys = [])
     {
         $factory = new BuilderFactory();
 
         if (is_array($astElement)) {
             foreach($astElement as $item) {
-                $this->recursiveWalkAndReplace($item, $keys);
+                $this->recursiveWalkAndReplace($envKeyPrefix, $item, $keys);
             }
 
         } else {
@@ -113,7 +120,7 @@ class ConfigToEnvCommand extends Command
 
                             $keys[] = $astElement->key->value;
 
-                            $key = $this->envKeyPrefix.'_'.strtoupper(implode('_', $keys));
+                            $key = $envKeyPrefix.'_'.strtoupper(implode('_', $keys));
                             $value = $astElement->value->value;
 
                             $envFuncCall = $factory->funcCall('env', [$key, $value]);
@@ -123,13 +130,13 @@ class ConfigToEnvCommand extends Command
 
                         default:
                             $keys[] = $astElement->key->value;
-                            $this->recursiveWalkAndReplace($astElement->value, $keys);
+                            $this->recursiveWalkAndReplace($envKeyPrefix, $astElement->value, $keys);
                             break;
                     }
                     break;
 
                 case Array_::class:
-                    $this->recursiveWalkAndReplace($astElement->items, $keys);
+                    $this->recursiveWalkAndReplace($envKeyPrefix, $astElement->items, $keys);
                     break;
 
                 default:
