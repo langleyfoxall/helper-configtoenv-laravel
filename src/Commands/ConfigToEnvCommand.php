@@ -38,12 +38,9 @@ class ConfigToEnvCommand extends Command
      *
      * @return void
      */
-    public function __construct(string $file)
+    public function __construct()
     {
         parent::__construct();
-
-        $this->file = $file;
-        $this->envKeyPrefix = strtoupper(substr(basename($configFile), 0, -4));
     }
 
     /**
@@ -53,6 +50,9 @@ class ConfigToEnvCommand extends Command
      */
     public function handle()
     {
+        $this->file = $this->argument('file');
+        $this->envKeyPrefix = strtoupper(substr(basename($this->file), 0, -4));
+
         $this->validateFile();
 
         $code = file_get_contents($this->file);
