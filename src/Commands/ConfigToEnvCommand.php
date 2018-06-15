@@ -16,6 +16,7 @@ use PhpParser\Node\Expr\ArrayItem;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Scalar\LNumber;
+use PhpParser\Node\Stmt\Return_;
 
 class ConfigToEnvCommand extends Command
 {
@@ -79,7 +80,11 @@ class ConfigToEnvCommand extends Command
             exit;
         }
 
-        $this->recursiveWalkAndReplace($envKeyPrefix, $ast[0]->expr->items);
+        foreach($ast as $key => &$astElement) {
+            if (get_class($astElement) == Return_::class) {
+                $this->recursiveWalkAndReplace($envKeyPrefix, $astElement->expr->items);
+            }
+        }
 
         file_put_contents($file, (new PrettyPrinter\Standard())->prettyPrintFile($ast));
 
