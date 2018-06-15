@@ -115,16 +115,18 @@ class ConfigToEnvCommand extends Command
 
         } else {
             
-            switch(get_class($astElement)) {
+            switch(is_object($astElement) ? get_class($astElement) : null) {
 
                 case ArrayItem::class:
 
-                    switch(get_class($astElement->value)) {
+                    switch(is_object($astElement) ? get_class($astElement) : null) {
 
                         case String_::class:
                         case LNumber::class:
 
-                            $keys[] = $astElement->key->value;
+                            if (isset($astElement->key)) {
+                                $keys[] = $astElement->key->value;
+                            }
 
                             $key = $envKeyPrefix.'_'.strtoupper(implode('_', $keys));
                             $value = $astElement->value->value;
@@ -135,7 +137,9 @@ class ConfigToEnvCommand extends Command
 
 
                         default:
-                            $keys[] = $astElement->key->value;
+                            if (isset($astElement->key)) {
+                                $keys[] = $astElement->key->value;
+                            }
                             $this->recursiveWalkAndReplace($envKeyPrefix, $astElement->value, $keys);
                             break;
                     }
