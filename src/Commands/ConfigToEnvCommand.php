@@ -50,10 +50,11 @@ class ConfigToEnvCommand extends Command
      */
     public function handle()
     {
-        $files = glob($this->argument('files'));
+        $globPattern = $this->argument('files');
+        $files = glob($globPattern);
 
         if (!$files) {
-            $this->error('No file(s) match '.$files.'.');
+            $this->error('No file(s) match '.$globPattern.'.');
             exit;
         }
 
