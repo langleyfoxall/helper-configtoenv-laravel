@@ -17,6 +17,7 @@ use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Scalar\LNumber;
 use PhpParser\Node\Stmt\Return_;
+use PhpParser\Node\Expr\ConstFetch;
 
 class ConfigToEnvCommand extends Command
 {
@@ -142,6 +143,14 @@ class ConfigToEnvCommand extends Command
                             $astElement->value = $envFuncCall;
                             break;
 
+                        case ConstFetch::class:
+                        
+                            $key = $envKeyPrefix.'_'.strtoupper(implode('_', $keys));
+                            $value = (strtolower(reset($astElement->value->name->parts)) === 'true');
+
+                            $envFuncCall = $factory->funcCall('env', [$key, $value]);
+                            $astElement->value = $envFuncCall;
+                            break;
 
                         default:
                             $this->recursiveWalkAndReplace($envKeyPrefix, $astElement->value, $keys);
