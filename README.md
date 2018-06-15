@@ -5,6 +5,19 @@ Laravel config file with calls to env().
 
 ## Installation
 
+As this package is currently private, you will first have to add this to the bottom of your project's `composer.json` file.
+
+```json
+"repositories": [
+    {
+        "type": "vcs",
+        "url": "git@github.com:LFSoftware/unleashed-api-client-php.git"
+    }
+]
+```
+
+You can then run the following Composer commadn to install this package.
+
 ```bash
 composer require langleyfoxall/laravel-config-to-env
 ```
