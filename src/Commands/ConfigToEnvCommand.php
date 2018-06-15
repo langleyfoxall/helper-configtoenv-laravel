@@ -111,9 +111,6 @@ class ConfigToEnvCommand extends Command
                             $key = $this->envKeyPrefix.'_'.strtoupper(implode('_', $keys));
                             $value = $astElement->value->value;
 
-                            echo 'Key: '.$key.', Value: '.$value;
-                            echo PHP_EOL;
-
                             $envFuncCall = $factory->funcCall('env', [$key, $value]);
                             $astElement->value = $envFuncCall;
                             break;
