@@ -126,6 +126,8 @@ class ConfigToEnvCommand extends Command
 
                     if ($astElement->key) {
                         $keys[] = $astElement->key->value;
+                    } elseif ($astElement->value && isset($astElement->value->value)) {
+                        $keys[] = substr(sha1($astElement->value->value), 0, 6);
                     }
 
                     switch(get_class($astElement->value)) {
