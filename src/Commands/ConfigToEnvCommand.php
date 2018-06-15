@@ -63,6 +63,7 @@ class ConfigToEnvCommand extends Command
             $ast = $parser->parse($code);
         } catch (Error $e) {
             $this->error('Parse error: '.$e->getMessage());
+            exit;
         }
 
         $this->recursiveWalkAndReplace($ast[0]->expr->items);
@@ -76,14 +77,17 @@ class ConfigToEnvCommand extends Command
     {
         if (!file_exists($this->file)) {
             $this->error($this->file.' does not exist.');
+            exit;
         }
 
         if (!is_readable($this->file)) {
             $this->error($this->file.' is not readable. Check permissions.');
+            exit;
         }
 
         if (!is_writeable($this->file)) {
             $this->error($this->file.' is not writeable. Check permissions.');
+            exit;
         }
     }
 
