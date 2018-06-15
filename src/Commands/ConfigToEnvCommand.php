@@ -67,7 +67,7 @@ class ConfigToEnvCommand extends Command
 
         $this->recursiveWalkAndReplace($ast[0]->expr->items);
 
-        file_put_contents($configFile, (new PrettyPrinter\Standard())->prettyPrintFile($ast));
+        file_put_contents($this->file, (new PrettyPrinter\Standard())->prettyPrintFile($ast));
 
     }
 
