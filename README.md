@@ -1,7 +1,7 @@
-# Laravel config to env
+# ⚙ Laravel Config To Env
 
 This package provide an Artisan command that replaces all variables in a 
-Laravel config file with calls to env().
+Laravel config file with calls to `env()`.
 
 ## Installation
 
