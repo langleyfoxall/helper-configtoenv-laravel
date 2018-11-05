@@ -5,17 +5,6 @@ Laravel config file with calls to env().
 
 ## Installation
 
-As this package is currently private, you will first have to add this to the bottom of your project's `composer.json` file.
-
-```json
-"repositories": [
-    {
-        "type": "vcs",
-        "url": "git@github.com:LFSoftware/helper-configtoenv-laravel.git"
-    }
-]
-```
-
 You can then run the following Composer command to install this package.
 
 ```bash
