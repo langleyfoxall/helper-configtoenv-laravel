@@ -1,6 +1,6 @@
 {
     "name": "langleyfoxall/laravel-config-to-env",
-    "description": "Artisan command that replaces all variables in a Laravel config file with calls to env()",
+    "description": "⚙ Artisan command that replaces all variables in a Laravel config file with calls to env()",
     "require": {
         "nikic/php-parser": "^4.0",
         "illuminate/support": "5.5.*||5.6.*",
